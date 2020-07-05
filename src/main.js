@@ -16,6 +16,16 @@ Vue.config.productionTip = false
 // 设置默认的api域名基准路径
 axios.defaults.baseURL = "http://127.0.0.1:3000"
 
+// 设置全局路由守卫
+router.beforeEach((to, from, next) => {
+  console.log("进入了路由守卫");
+  // 若访问的页面不是首页同时有没有token
+  if (to.name !== "loginPage" && !localStorage.getItem("token")) {
+    return router.replace("/login").catch(err => { })
+  }
+  next();
+})
+
 new Vue({
   router,
   render: function (h) { return h(App) }
