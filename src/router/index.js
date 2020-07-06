@@ -12,16 +12,35 @@ const routes = [
     path: '/',
     name: 'HomePage',
     component: Home,
+    meta: {
+      breadcrumb: "首页"
+    },
     children: [
       {
-        path: "/postlist",
+        path: "postlist",
         name: "postlistPage",
-        component: PostList
+        component: PostList,
+        meta: {
+          breadcrumb: "文章列表"
+        }
       },
       {
-        path: "/editpost",
+        // 配置动态路由
+        path: "editpost/:id",
         name: "editPostPage",
-        component: EditPost
+        component: EditPost,
+        meta: {
+          breadcrumb: "发布文章"
+        }
+      },
+      {
+        // 配置动态路由
+        path: "editpost",
+        name: "editPostPage",
+        component: EditPost,
+        meta: {
+          breadcrumb: "发布文章"
+        }
       }
     ]
   },

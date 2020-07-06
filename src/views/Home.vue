@@ -6,15 +6,16 @@
       <div class="logoTitle">黑马头条</div>
       <el-menu
         class="el-menu-vertical-demo"
+        :default-active="$route.path"
         background-color="#e9eef3"
         text-color="#333"
         active-text-color="#ffd04b"
       >
-        <el-menu-item index="1" @click="$router.push('/postlist')">
+        <el-menu-item index="/postlist" @click="switchPath('/postlist')">
           <i class="el-icon-menu"></i>
           <span slot="title">文章列表</span>
         </el-menu-item>
-        <el-menu-item index="2" @click="$router.push('/editpost')">
+        <el-menu-item index="/editpost" @click="switchPath('/editpost')">
           <i class="el-icon-setting"></i>
           <span slot="title">发布文章</span>
         </el-menu-item>
@@ -29,6 +30,7 @@
       </el-header>
       <!-- 主体main -->
       <el-main>
+        <BreadCrumb :breadCrumb="breadCrumb" />
         <router-view />
       </el-main>
     </el-container>
@@ -36,22 +38,38 @@
 </template>
 
 <script>
+import BreadCrumb from "@/components/BreadCrumb";
 export default {
+  components: {
+    BreadCrumb
+  },
   data() {
     return {
-      userInfo: ""
+      userInfo: "",
+      breadCrumb: []
     };
   },
   created() {
     const userInfo = localStorage.getItem("user");
     this.userInfo = JSON.parse(userInfo);
+    // 面包屑导航
+    this.breadCrumb = this.$route.matched;
   },
   methods: {
+    // 退出登录
     logout() {
       console.log("退出登录事件触发了");
       localStorage.clear();
       this.$message.success("已退出登录");
       this.$router.replace("/login");
+    },
+    // 切换路由
+    switchPath(path) {
+      if (this.$route.path != path) {
+        this.$router.push(path);
+      }
+      // 面包屑导航
+      this.breadCrumb = this.$route.matched;
     }
   }
 };
