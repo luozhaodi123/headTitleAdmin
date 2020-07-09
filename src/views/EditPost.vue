@@ -27,6 +27,7 @@
       </div>
       <!-- 封面 -->
       <div class="postCover unifiedLayout">
+        <!-- file-list 绑定图片数据form.cover在文件列表上显示 -->
         <el-form-item label="封面">
           <el-upload
             :action="$axios.defaults.baseURL+'/upload'"
@@ -103,7 +104,7 @@ export default {
       this.$axios({
         url: "/post/" + this.$route.query.id
       }).then(res => {
-        console.log(res.data.data);
+        // console.log(res.data.data);
         const { data } = res.data;
         // 要将返回数据中的栏目categories转换成页面显示的数据形式
         const newCateggories = data.categories.map(item => {
