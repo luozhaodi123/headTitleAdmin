@@ -16,6 +16,7 @@
         ></el-pagination>
       </div>
       <!-- 表格组件 -->
+      <!-- slot-scope="scope"作用域插 -->
       <el-table :data="tableData" style="width: 100%">
         <el-table-column label="序号" width="80">
           <template slot-scope="scope">
@@ -24,7 +25,13 @@
         </el-table-column>
         <el-table-column label="缩略图" width="120">
           <template slot-scope="scope">
-            <img class="thumbnail" :src="scope.row.cover[0].url" alt />
+            <img
+              v-if="scope.row.cover.length>0"
+              class="thumbnail"
+              :src="scope.row.cover[0].url"
+              alt
+            />
+            <img v-else class="thumbnail" src="@/assets/logo.png" alt />
           </template>
         </el-table-column>
         <el-table-column label="标题" width="340">
@@ -90,7 +97,21 @@ export default {
         }
       }).then(res => {
         console.log(res.data.data);
-        this.tableData = res.data.data;
+        let { data } = res.data;
+        // 处理在发布文章中图片没有基准地址的问题
+        let newData = data.map(item => {
+          // 表示data中的每一项的cover
+          let newCover = item.cover.map(img => {
+            let newImg = { ...img };
+            if (newImg.url.indexOf("http") == -1) {
+              newImg.url = this.$axios.defaults.baseURL + newImg.url;
+            }
+            return newImg;
+          });
+          item.cover = newCover;
+          return item;
+        });
+        this.tableData = newData;
         this.total = res.data.total;
       });
     },
@@ -106,10 +127,10 @@ export default {
     },
     handleEdit(id) {
       console.log(id);
-      this.$router.push("/editpost/" + id);
+      this.$router.push("/editpost?id=" + id);
     },
     handleDelete(id) {
-      this.$message.success("该功能还要继续完善，主要是没有提供接口");
+      this.$message.success("该功能还要继续完善");
     }
   }
 };

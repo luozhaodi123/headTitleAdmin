@@ -25,16 +25,6 @@ const routes = [
         }
       },
       {
-        // 配置动态路由
-        path: "editpost/:id",
-        name: "editPostPage",
-        component: EditPost,
-        meta: {
-          breadcrumb: "发布文章"
-        }
-      },
-      {
-        // 配置动态路由
         path: "editpost",
         name: "editPostPage",
         component: EditPost,

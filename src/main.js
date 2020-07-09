@@ -26,6 +26,16 @@ router.beforeEach((to, from, next) => {
   next();
 })
 
+// 设置请求拦截器
+// 统一添加headers Authorization
+axios.interceptors.request.use(config => {
+  if (!config.headers.Authorization && localStorage.getItem("token")) {
+    config.headers.Authorization = localStorage.getItem("token");
+  }
+  // 拦截完之后放行
+  return config;
+})
+
 new Vue({
   router,
   render: function (h) { return h(App) }
